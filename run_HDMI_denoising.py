@@ -7,9 +7,9 @@ import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument('image_path', help='paths of an image')
-parser.add_argument('-s', '--stdv', type=int,default=0.2, help="standard deviation of the noise (default: 0.2)")
+parser.add_argument('-s', '--stdv', type=float, default=0.1, help="standard deviation of the noise (default: 0.1)")
 parser.add_argument('-w', '--patch_size', type=int,default=10, help="patch size (default: 10)")
-parser.add_argument('-n', '--n_iter', type=int, default=100, help="number of iterations of EM algorithm(default: 100)")
+parser.add_argument('-n', '--n_iter', type=int, default=50, help="number of iterations of EM algorithm(default: 50)")
 parser.add_argument('-k', '--n_groups', type=int, default=40, help="number of groups in the mixture model")
 parser.add_argument('--gpu', action='store_true', help='use GPU if possible')
 parser.add_argument('--verbose', action='store_true', help='increase verbosity')
@@ -30,7 +30,7 @@ path = os.path.basename(args.image_path)
 img_name = os.path.splitext(path)[0]
 
 # add gaussian white noise
-img_noisy = img + args.stdv*torch.randn(img.shape, device=DEVICE)
+img_noisy = img + torch.tensor(args.stdv)*torch.randn(img.shape, device=DEVICE)
 utils.imsave(img_name+'_noisy.png', img_noisy)
 
 # extract patches
